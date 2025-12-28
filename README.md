@@ -21,7 +21,7 @@ dotnet build -c Release
 dotnet run --project . --model ..\..\model.onnx --image ..\..\test_face.jpg --cascade 
 "C:\path\to\haarcascade_frontalface_default.xml"
 ```
-dotnet run --project . --image 'Happy.jpg' --model .\arcface.onnx
+dotnet run --project . --image 'Happy.jpg' --model .\emotion.onnx
 
 Notes:
 - The code expects an ONNX model that accepts a single 48x48 grayscale image. 
