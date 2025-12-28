@@ -13,12 +13,12 @@ Quick start (PowerShell):
 
 ```powershell
 # From repo root, build the project
-cd FaceExpressionCNN\CSharpFaceRecognition
+cd <path_to_github>\CodeWiseFacialRecognitionCNN
 dotnet restore
 dotnet build -c Release
 
 # Run (provide an ONNX model and an input image). Optional: provide Haarcascade XML for face detection
-dotnet run --project . -- --model ..\..\model.onnx --image ..\..\test_face.jpg --cascade 
+dotnet run --project . --model ..\..\model.onnx --image ..\..\test_face.jpg --cascade 
 "C:\path\to\haarcascade_frontalface_default.xml"
 ```
 dotnet run --project . --image 'Happy.jpg' --model .\arcface.onnx
