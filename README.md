@@ -1,8 +1,8 @@
 # CodeWiseFacialRecognitionCNN
-Improving CodeWise Student Satisfaction using CNN-based Facial Expression Analysis for Enhanced Coaching in and  outside of Classrooms 
-CSharpFaceRecognition
 =====================
 
+Improving CodeWise Student Satisfaction using CNN-based Facial Expression Analysis for Enhanced Coaching in and  outside of Classrooms 
+CSharpFaceRecognition
 This is a minimal C# console application that performs inference with an ONNX model for facial expression recognition.
 
 It uses:
