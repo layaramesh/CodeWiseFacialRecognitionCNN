@@ -16,7 +16,6 @@ This project investigates:
 This work supports a research paper currently under revision for submission. And will be used in real-world to test feasibility.
 
 ## Features
-- Custom CNN architecture implemented in Python  
 - Data preprocessing pipeline (normalization, augmentation, resizing)  
 - Training, validation, and testing scripts  
 - Accuracy, loss, and confusion matrix visualizations  
