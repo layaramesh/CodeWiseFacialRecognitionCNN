@@ -1,10 +1,8 @@
 # Facial Expression Recognition Using Convolutional Neural Networks
 
 ## Overview
-This project implements a Convolutional Neural Network (CNN) for classifying human facial expressions.  
+This project utilizes off-the-shelf Convolutional Neural Network (CNN) models for classifying human facial expressions.  
 It was developed as part of an independent research study exploring the intersection of affective computing, accessibility, and real‑world educational applications.
-
-The model is trained on a curated dataset of labeled facial images and optimized for accuracy, generalization, and deployment feasibility.
 
 ## Motivation
 Many emotion‑recognition systems fail on real‑world data or underrepresented groups.  
@@ -13,7 +11,7 @@ This project investigates:
 - What preprocessing steps improve robustness  
 - How lightweight models can be deployed in educational tools  
 
-This work supports a research paper currently under revision for submission. And will be used in real-world to test feasibility.
+This work supports a research paper currently under revision for submission. And will be used in the real-world to test feasibility.
 
 Research paper: https://drive.google.com/file/d/1BceV5Gp2VVh-fmlAwnPFNGkIKhGxUqdw/view?usp=drive_link
 
