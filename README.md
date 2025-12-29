@@ -15,6 +15,8 @@ This project investigates:
 
 This work supports a research paper currently under revision for submission. And will be used in real-world to test feasibility.
 
+Research paper: https://drive.google.com/file/d/1BceV5Gp2VVh-fmlAwnPFNGkIKhGxUqdw/view?usp=drive_link
+
 ## Features
 - Data preprocessing pipeline (normalization, augmentation, resizing)  
 - Training, validation, and testing scripts  
