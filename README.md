@@ -1,43 +1,55 @@
-# CodeWiseFacialRecognitionCNN
-=====================
+# Facial Expression Recognition Using Convolutional Neural Networks
 
-Improving CodeWise Student Satisfaction using CNN-based Facial Expression Analysis for Enhanced Coaching in and  outside of Classrooms 
-CSharpFaceRecognition
-This is a minimal C# console application that performs inference with an ONNX model for facial expression recognition.
+## Overview
+This project implements a Convolutional Neural Network (CNN) for classifying human facial expressions.  
+It was developed as part of an independent research study exploring the intersection of affective computing, accessibility, and real‑world educational applications.
 
-It uses:
-- `Microsoft.ML.OnnxRuntime` for ONNX inference
-- `OpenCvSharp4` for image I/O and Haarcascade face detection
+The model is trained on a curated dataset of labeled facial images and optimized for accuracy, generalization, and deployment feasibility.
 
-Quick start (PowerShell):
+## Motivation
+Many emotion‑recognition systems fail on real‑world data or underrepresented groups.  
+This project investigates:
+- How CNN architectures perform across diverse facial expressions  
+- What preprocessing steps improve robustness  
+- How lightweight models can be deployed in educational tools  
 
+This work supports a research paper currently under revision for submission. And will be used in real-world to test feasibility.
+
+## Features
+- Custom CNN architecture implemented in Python  
+- Data preprocessing pipeline (normalization, augmentation, resizing)  
+- Training, validation, and testing scripts  
+- Accuracy, loss, and confusion matrix visualizations  
+- Modular code structure for experimentation  
+
+## Dataset
+- Source: Publicly available facial expression datasets  
+- Classes: e.g., Happy, Sad, Angry, Neutral, Surprise, Fear, Disgust  
+- Preprocessing:  
+  - Grayscale conversion  
+  - Histogram equalization  
+  - Augmentation (flip, rotation, shift)
+
+## Results
+- Best model accuracy (emotion-ferplus-8): 34.8%
+- emotion model accuracy: 0%
+- emotion_cnn model accuracy: 0%
+- Evaluation dataset size: 23 classroom-like images
+
+## Immediate Future Work
+- Improve dataset diversity  
+- Group emotions into distinct groups: positive (happy, neutral, surprise) and negative (sad, fear, anger, disgust) and check if improves accuracy
+- Add Webcam module to get real world signal
+- Deploy in a small pilot in real classroom to see it working
+
+## How to Run
 ```powershell
 # From repo root, build the project
-cd <path_to_github>\CodeWiseFacialRecognitionCNN
+cd <project root>
 dotnet restore
 dotnet build -c Release
 
 # Run (provide an ONNX model and an input image). Optional: provide Haarcascade XML for face detection
-dotnet run --project . --model ..\..\model.onnx --image ..\..\test_face.jpg --cascade 
-"C:\path\to\haarcascade_frontalface_default.xml"
+dotnet run --project . --model .\Models\model.onnx --image .\Data\happy.jpg --cascade 
+.\haarcascade_frontalface_default.xml
 ```
-dotnet run --project . --image 'Happy.jpg' --model .\emotion.onnx
-
-Notes:
-- The code expects an ONNX model that accepts a single 48x48 grayscale image. 
-- Labels are currently the FER2013 labels: `Angry, Disgust, Fear, Happy, Sad, Surprise, Neutral`.
-
-**Troubleshooting native runtime errors**
-- If you see an error like "The type initializer for 'OpenCvSharp.Internal.NativeMethods' threw an exception", it's usually because the native OpenCV runtime DLLs couldn't be loaded. Common fixes:
-	- Install the **Microsoft Visual C++ Redistributable for Visual Studio 2015-2022 (x64)**: https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist
-	- Build/run with the Windows runtime identifier so native libraries are included/copied:
-
-```powershell
-# build for win-x64 (adds native runtimes)
-dotnet build -c Release -r win-x64
-
-# or run with RID
-dotnet run --project . -c Release -r win-x64 -- --model .\model.onnx --image ..\test_face.jpg
-```
-
-	- Make sure your process architecture (x64 vs x86) matches the native binaries. The project is configured to target `win-x64` by default.
