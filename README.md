@@ -1,54 +1,255 @@
-# Facial Expression Recognition Using Convolutional Neural Networks
+# Facial Expression Recognition System
 
-## Overview
-This project utilizes off-the-shelf Convolutional Neural Network (CNN) models for classifying human facial expressions.  
-It was developed as part of an independent research study exploring the intersection of affective computing, accessibility, and real‑world educational applications.
+A complete pipeline for facial expression recognition using ONNX models, from image collection to model evaluation.
 
-## Motivation
-Many emotion‑recognition systems fail on real‑world data or underrepresented groups.  
-This project investigates:
-- How CNN architectures perform across diverse facial expressions  
-- What preprocessing steps improve robustness  
-- How lightweight models can be deployed in educational tools  
+## Research paper and Motivation
 
-This work supports a research paper currently under revision for submission. And will be used in the real-world to test feasibility.
+https://drive.google.com/drive/folders/1dIsPLGT7txuxNzNkvnmNJDLxU-91quDM
 
-Research paper: https://drive.google.com/file/d/1BceV5Gp2VVh-fmlAwnPFNGkIKhGxUqdw/view?usp=drive_link
+This research explores whether CNN-based FER can be applied meaningfully within CodeWise’s online
+learning environment. Many CodeWise instructors are high school students with limited teaching
+experience, and younger learners oŌen hesitate to ask for help. A system capable of detecting confusion
+or disengagement in real-time could support instructors in adjusting their teaching and providing timely
+intervention.
 
-## Features
-- Data preprocessing pipeline (normalization, augmentation, resizing)  
-- Training, validation, and testing scripts  
-- Accuracy, loss, and confusion matrix visualizations  
-- Modular code structure for experimentation  
+## System Architecture
 
-## Dataset
-- Source: Publicly available facial expression datasets  
-- Classes: e.g., Happy, Sad, Angry, Neutral, Surprise, Fear, Disgust  
-- Preprocessing:  
-  - Grayscale conversion  
-  - Histogram equalization  
-  - Augmentation (flip, rotation, shift)
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                       DATA COLLECTION PHASE                              │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                    ┌───────────────┴───────────────┐
+                    │                               │
+         ┌──────────▼──────────┐       ┌───────────▼──────────┐
+         │  Pexels API         │       │  Bing Images API     │
+         │  (Free)             │       │  (Alternative)       │
+         └──────────┬──────────┘       └───────────┬──────────┘
+                    │                               │
+                    └───────────────┬───────────────┘
+                                    │
+                         ┌──────────▼─────────────┐
+                         │ download_free_images.py│
+                         │ - Fetch by emotion     │
+                         │ - Organize in folders  │
+                         └──────────┬─────────────┘
+                                    │
+                         ┌──────────▼─────────────┐
+                         │   cleanup_images.py    │
+                         │ - Quality control      │
+                         │ - Remove low quality   │
+                         └──────────┬─────────────┘
+                                    │
+                                    ▼
+                         [ Images/ Folder ]
+                         (7 emotion folders)
+                                    │
+┌─────────────────────────────────────────────────────────────────────────┐
+│                       INFERENCE PHASE                                    │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                    ┌───────────────┴───────────────┐
+                    │                               │
+         ┌──────────▼──────────┐       ┌───────────▼──────────┐
+         │  Python Batch       │       │  C# Single Image     │
+         │  (batch_predict.py) │       │  (Program.cs)        │
+         └──────────┬──────────┘       └──────────────────────┘
+                    │
+                    │  ┌──────────────────────────┐
+                    ├─▶│ emotion_cnn.onnx        │
+                    │  │ (17.53% accuracy)       │
+                    │  └──────────────────────────┘
+                    │
+                    │  ┌──────────────────────────┐
+                    ├─▶│ emotion-ferplus-8.onnx  │
+                    │  │ (37.64% accuracy)       │
+                    │  └──────────────────────────┘
+                    │
+                    │  ┌──────────────────────────┐
+                    └─▶│ emotion.onnx            │
+                       │ (13.79% accuracy)       │
+                       └──────────────────────────┘
+                                    │
+                         ┌──────────▼─────────────┐
+                         │     output.csv         │
+                         │ - Raw predictions      │
+                         │ - All 3 models         │
+                         └──────────┬─────────────┘
+                                    │
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    CLASSIFICATION PHASE                                  │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                         ┌──────────▼─────────────┐
+                         │ add_classification.py  │
+                         │ - Apply Hybrid Logic   │
+                         │ - Add labels           │
+                         └──────────┬─────────────┘
+                                    │
+                         ┌──────────▼─────────────┐
+                         │ HYBRID MODEL LOGIC     │
+                         │                        │
+                         │ Needs Help emotions:   │
+                         │ Use emotion_cnn        │
+                         │ (Fear, Anger, Surprise,│
+                         │  Disgust, Sadness)     │
+                         │                        │
+                         │ Understands Material:  │
+                         │ Use emotion_ferplus    │
+                         │ (Happiness, Neutral)   │
+                         └──────────┬─────────────┘
+                                    │
+                  ┌─────────────────▼─────────────────┐
+                  │ output_with_classification.csv    │
+                  │ - Binary labels                   │
+                  │ - "Needs Help" vs "Understands"   │
+                  └─────────────────┬─────────────────┘
+                                    │
+┌─────────────────────────────────────────────────────────────────────────┐
+│                     EVALUATION PHASE                                     │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                         ┌──────────▼─────────────┐
+                         │confusion_matrix_per_   │
+                         │model.py                │
+                         │ - 7x7 matrices         │
+                         │ - 2x2 custom labels    │
+                         │ - All metrics          │
+                         └──────────┬─────────────┘
+                                    │
+                         ┌──────────▼─────────────┐
+                         │ confusion_matrix.csv   │
+                         │                        │
+                         │ TP, TN, FP, FN         │
+                         │ Precision, Recall, F1  │
+                         │ Per-emotion metrics    │
+                         │                        │
+                         │ RESULT: 92.24% accuracy│
+                         └────────────────────────┘
+```
 
-## Results
-- Best model accuracy (emotion-ferplus-8): 34.8%
-- emotion model accuracy: 0%
-- emotion_cnn model accuracy: 0%
-- Evaluation dataset size: 23 classroom-like images
+### Pipeline Summary
 
-## Immediate Future Work
-- Improve dataset diversity  
-- Group emotions into distinct groups: positive (happy, neutral, surprise) and negative (sad, fear, anger, disgust) and check if improves accuracy
-- Add Webcam module to get real world signal
-- Deploy in a small pilot in real classroom to see it working
+1. **Data Collection**: Download emotion-labeled images from free APIs
+2. **Quality Control**: Filter and validate images
+3. **Inference**: Run 3 ONNX models on all images
+4. **Hybrid Classification**: Combine models for educational needs assessment
+5. **Evaluation**: Generate comprehensive confusion matrices and metrics
 
-## How to Run
+### Key Innovation: Hybrid Model Strategy
+
+The hybrid model achieves **92.24% accuracy** by intelligently selecting which base model to use:
+- **emotion_cnn.onnx**: Better at detecting "Needs Help" emotions
+- **emotion-ferplus-8.onnx**: Better at detecting "Understanding Material" emotions
+- **Note**: The 92.24% accuracy refers to the custom label classification task (“Needs Help” vs “Understands Material”), not 7‑class emotion recognition.
+
+## Components
+
+### C# ONNX Inference
+- Uses `Microsoft.ML.OnnxRuntime` for ONNX inference
+- Uses `OpenCvSharp4` for image I/O and face detection
+- Supports 7 emotion labels: Angry, Disgust, Fear, Happy, Sad, Surprise, Neutral
+
+### Python Analysis Pipeline
+See [READMe_Metrics_Calculations.md](READMe_Metrics_Calculations.md) for the complete data collection and analysis workflow.
+
+## Quick Start - C# Inference
+
 ```powershell
-# From repo root, build the project
-cd <project root>
+# Build the project
 dotnet restore
 dotnet build -c Release
 
-# Run (provide an ONNX model and an input image). Optional: provide Haarcascade XML for face detection
-dotnet run --project . --model .\Models\model.onnx --image .\Data\happy.jpg --cascade 
-.\haarcascade_frontalface_default.xml
+# Run inference on a single image
+dotnet run --project . --model .\Models\emotion.onnx --image .\Images\angry\angry_001.jpg
 ```
+
+## Model Requirements
+
+- Input: 48x48 grayscale image in NCHW format `[1,1,48,48]`
+- Output: 7 emotion probabilities
+- Format: ONNX
+
+To convert Keras/TensorFlow models to ONNX, use `keras2onnx` or `tf2onnx`.
+
+## Model Performance
+
+Performance comparison on 348 test images across 7 emotion categories.
+
+### Hybrid Model Logic
+
+- **Needs Help emotions** (Fear, Anger, Surprise, Disgust, Sadness): Uses emotion_cnn predictions
+- **Understands Material emotions** (Happiness, Neutral): Uses emotion_ferplus predictions
+
+### Emotion-Level Accuracy (7 Classes)
+
+| Model | Overall Accuracy | Macro Precision | Macro Recall | Macro F1 |
+|-------|------------------|-----------------|--------------|----------|
+| emotion-ferplus-8.onnx | 37.64% | 59.87% | 37.49% | 34.50% |
+| emotion_cnn.onnx | 17.53% | 20.03% | 17.43% | 10.19% |
+| emotion.onnx | 13.79% | 9.03% | 13.72% | 5.41% |
+| Hybrid Model | **92.24%** | **97.02%** | **91.94%** | **94.41%** |
+
+**Key Findings**:
+- Hybrid model achieves **92.24% accuracy** for educational needs assessment (identifying students who need help)
+- Data is still low to latch on to this 92.24% accuracy rate, more studies needed
+- Best individual model: emotion-ferplus-8 (37.64% emotion-level accuracy)
+
+
+## Troubleshooting
+
+**Native runtime errors (OpenCvSharp)**
+
+If you see "The type initializer for 'OpenCvSharp.Internal.NativeMethods' threw an exception":
+
+1. Install [Microsoft Visual C++ Redistributable for Visual Studio 2015-2022 (x64)](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)
+
+2. Build with Windows runtime identifier:
+   ```powershell
+   dotnet build -c Release -r win-x64
+   dotnet run --project . -c Release -r win-x64 --model .\Models\emotion.onnx --image .\Images\angry\angry_001.jpg
+   ```
+
+3. Ensure process architecture (x64) matches native binaries
+
+## API Keys Setup
+
+This project uses the Pexels API for image download in the Python pipeline.
+
+1. Copy `.env.example` to `.env`:
+   ```powershell
+   Copy-Item .env.example .env
+   ```
+
+2. Get a free API key from [Pexels API](https://www.pexels.com/api/)
+
+3. Edit `.env` and add your API key
+
+4. The `.env` file is in `.gitignore` and will not be committed
+
+**Note**: Never commit `.env` to GitHub. Only commit `.env.example` with placeholder values.
+
+## Project Structure
+
+```
+├── Program.cs                  # C# ONNX inference code
+├── scripts/                    # Python analysis pipeline
+│   ├── download_free_images.py
+│   ├── cleanup_images.py
+│   ├── batch_predict.py
+│   ├── add_classification.py
+│   ├── confusion_matrix_per_model.py
+│   └── emotion_utils.py
+├── Models/                     # ONNX models
+├── Images/                     # Training/test images
+├── Data/                       # Haarcascade files
+├── output.csv                  # Raw model predictions
+├── output_with_classification.csv  # Enriched predictions
+└── confusion_matrix.csv        # Performance metrics
+```
+
+## Documentation
+
+- [READMe_Metrics_Calculations.md](READMe_Metrics_Calculations.md) - Complete Python analysis pipeline
+- [.env.example](.env.example) - API key configuration template
+

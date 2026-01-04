@@ -1,0 +1,103 @@
+MODEL: emotion-ferplus-8.onnx
+
+CONFUSION MATRIX
+Actual/Predicted,Anger,Disgust,Fear,Happiness,Sadness,Surprise,Neutral,Total
+Anger,8,0,0,10,4,2,26,50
+Disgust,0,0,0,7,2,0,40,49
+Fear,1,0,1,10,1,4,33,50
+Happiness,0,0,0,28,2,0,20,50
+Sadness,1,0,0,5,3,1,39,49
+Surprise,0,0,0,7,1,17,25,50
+Neutral,1,0,0,6,0,1,42,50
+Column Total,11,0,1,73,13,25,225,348
+
+PERFORMANCE METRICS
+Emotion,Total,Correct,Precision,Recall,F1 Score
+Anger,50,8,0.7273,0.1600,0.2623
+Disgust,49,0,0.0000,0.0000,0.0000
+Fear,50,1,1.0000,0.0200,0.0392
+Happiness,50,28,0.3836,0.5600,0.4553
+Sadness,49,3,0.2308,0.0612,0.0968
+Surprise,50,17,0.6800,0.3400,0.4533
+Neutral,50,42,0.1867,0.8400,0.3055
+Macro Average,,,0.4583,0.2830,0.2303
+Overall Accuracy,0.2845 (99/348)
+
+
+MODEL: emotion.onnx
+
+CONFUSION MATRIX
+Actual/Predicted,Anger,Disgust,Fear,Happiness,Sadness,Surprise,Neutral,Total
+Anger,2,2,0,3,0,0,43,50
+Disgust,0,1,0,0,0,0,48,49
+Fear,3,1,0,0,1,0,45,50
+Happiness,0,0,1,1,1,0,47,50
+Sadness,0,2,2,3,0,0,42,49
+Surprise,0,1,0,2,0,0,47,50
+Neutral,3,0,2,1,0,0,44,50
+Column Total,8,7,5,10,2,0,316,348
+
+PERFORMANCE METRICS
+Emotion,Total,Correct,Precision,Recall,F1 Score
+Anger,50,2,0.2500,0.0400,0.0690
+Disgust,49,1,0.1429,0.0204,0.0357
+Fear,50,0,0.0000,0.0000,0.0000
+Happiness,50,1,0.1000,0.0200,0.0333
+Sadness,49,0,0.0000,0.0000,0.0000
+Surprise,50,0,0.0000,0.0000,0.0000
+Neutral,50,44,0.1392,0.8800,0.2404
+Macro Average,,,0.0903,0.1372,0.0541
+Overall Accuracy,0.1379 (48/348)
+
+
+MODEL: emotion_cnn.onnx
+
+CONFUSION MATRIX
+Actual/Predicted,Anger,Disgust,Fear,Happiness,Sadness,Surprise,Neutral,Total
+Anger,48,0,0,1,0,0,1,50
+Disgust,47,0,0,2,0,0,0,49
+Fear,47,0,1,1,0,0,1,50
+Happiness,47,0,0,3,0,0,0,50
+Sadness,46,0,0,3,0,0,0,49
+Surprise,47,0,1,1,0,1,0,50
+Neutral,47,0,0,1,0,1,1,50
+Column Total,329,0,2,12,0,2,3,348
+
+PERFORMANCE METRICS
+Emotion,Total,Correct,Precision,Recall,F1 Score
+Anger,50,48,0.1459,0.9600,0.2533
+Disgust,49,0,0.0000,0.0000,0.0000
+Fear,50,1,0.5000,0.0200,0.0385
+Happiness,50,3,0.2500,0.0600,0.0968
+Sadness,49,0,0.0000,0.0000,0.0000
+Surprise,50,1,0.5000,0.0200,0.0385
+Neutral,50,1,0.3333,0.0200,0.0377
+Macro Average,,,0.2470,0.1543,0.0664
+Overall Accuracy,0.1552 (54/348)
+
+
+MODEL COMPARISON SUMMARY
+Model,Accuracy,Macro Precision,Macro Recall,Macro F1
+emotion-ferplus-8.onnx,0.2845,0.4583,0.2830,0.2303
+emotion.onnx,0.1379,0.0903,0.1372,0.0541
+emotion_cnn.onnx,0.1552,0.2470,0.1543,0.0664
+
+
+CUSTOM LABEL ANALYSIS (Needs Help vs Understands Material)
+
+Hybrid Model - Label-Based Confusion Matrix
+Actual/Predicted,Needs Help,Understands Material
+Needs Help,238,10
+Understands Material,4,96
+
+CUSTOM LABEL METRICS
+Metric,Value
+True Positive (TP),238
+True Negative (TN),96
+False Positive (FP),4
+False Negative (FN),10
+
+Accuracy,0.9598
+Precision (Needs Help),0.9835
+Recall (Needs Help),0.9597
+F1 Score,0.9714

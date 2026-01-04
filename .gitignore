@@ -1,0 +1,27 @@
+# API Keys and Secrets
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+
+# Build outputs
+bin/
+obj/
+
+# User-specific files
+*.suo
+*.user
+*.userosintegration
+*.sln.docstates
+
+# Visual Studio
+.vs/
+
+# Output files (keep example, ignore actual results)
+output.csv
+output_with_classification.csv

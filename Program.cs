@@ -244,7 +244,7 @@ namespace CSharpFaceRecognition
             if (outputTensor.Length > 100)
             {
                 if (!csvMode) Console.WriteLine($"Image: {Path.GetFileName(imagePath)} - Embedding model detected (output dim: {outputTensor.Length}), skipping classification.");
-                else Console.WriteLine($"{Path.GetFileName(imagePath)},N/A");
+                else Console.WriteLine($"{Path.GetFileName(imagePath)},N/A,0");
                 return 0;
             }
 
@@ -255,7 +255,7 @@ namespace CSharpFaceRecognition
 
             if (csvMode)
             {
-                // CSV mode: filename,prediction
+                // CSV mode: filename,prediction,probability
                 if (isEmotionModel)
                 {
                     int best = Array.IndexOf(probs, probs.Max());
@@ -272,12 +272,14 @@ namespace CSharpFaceRecognition
                         if (alt >= 0) best = alt;
                     }
                     string label = best >= 0 && best < Labels.Length ? Labels[best] : best.ToString();
-                    Console.WriteLine($"{Path.GetFileName(imagePath)},{label}");
+                    string probStr = probs[best].ToString("F4");
+                    Console.WriteLine($"{Path.GetFileName(imagePath)},{label},{probStr}");
                 }
                 else
                 {
                     int best = Array.IndexOf(probs, probs.Max());
-                    Console.WriteLine($"{Path.GetFileName(imagePath)},Class {best}");
+                    string probStr = probs[best].ToString("F4");
+                    Console.WriteLine($"{Path.GetFileName(imagePath)},Class {best},{probStr}");
                 }
             }
             else
