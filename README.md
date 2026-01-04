@@ -190,6 +190,13 @@ Performance comparison on 348 test images across 7 emotion categories.
 | emotion.onnx | 13.79% | 9.03% | 13.72% | 5.41% |
 | Hybrid Model | **92.24%** | **97.02%** | **91.94%** | **94.41%** |
 
+Note: Running the model on a different device results in:
+Accuracy- 0.9598
+Precision (Needs Help)- 0.9835
+Recall (Needs Help)- 0.9597
+F1 Score- 0.9714
+
+
 **Key Findings**:
 - Hybrid model achieves **92.24% accuracy** for educational needs assessment (identifying students who need help)
 - Data is still low to latch on to this 92.24% accuracy rate, more studies needed
@@ -206,7 +213,7 @@ If you see "The type initializer for 'OpenCvSharp.Internal.NativeMethods' threw 
 
 2. Build with Windows runtime identifier:
    ```powershell
-   dotnet build -c Release -r win-x64
+   dotnet build -c Release
    dotnet run --project . -c Release -r win-x64 --model .\Models\emotion.onnx --image .\Images\angry\angry_001.jpg
    ```
 
