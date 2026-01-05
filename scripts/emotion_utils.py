@@ -4,8 +4,8 @@ Shared utility functions for emotion classification analysis
 import re
 
 def extract_classification_from_filename(filename):
-    """Extract emotion classification from filename like 'angry_001.jpg'"""
-    match = re.match(r'([a-z]+)_', filename.lower())
+    """Extract emotion classification from filename like 'angry_001.jpg' or 'angry001.jpg'"""
+    match = re.match(r'([a-z]+)_?', filename.lower())
     if match:
         emotion = match.group(1)
         # Map filename prefixes to standard emotion names

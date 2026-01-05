@@ -21,7 +21,3 @@ obj/
 
 # Visual Studio
 .vs/
-
-# Output files (keep example, ignore actual results)
-output.csv
-output_with_classification.csv

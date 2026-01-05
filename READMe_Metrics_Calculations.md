@@ -31,6 +31,8 @@ cd scripts
 
 # Step 1: Download images
 python download_free_images.py
+# alternate to download only images of a particular emotion type
+python download_free_images.py --emotion disgust --count 200
 
 # Step 2 (Optional): Clean up images
 python cleanup_images.py

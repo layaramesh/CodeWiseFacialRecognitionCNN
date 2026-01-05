@@ -202,6 +202,17 @@ F1 Score- 0.9714
 - Data is still low to latch on to this 92.24% accuracy rate, more studies needed
 - Best individual model: emotion-ferplus-8 (37.64% emotion-level accuracy)
 
+**Metrics post manual cleanup of images**:
+A visual inspection of all 350 images was done, and images of the wrong classification were re-classified. Most of the images in "Disgust" were not disgust. I attempted to download 200 more disgust images to see if I can get better disgust image count, but there weren't great results. Since disgust is not an emotion that generally appears in a classroom setting anyways, the disgust count can be 4 images.
+
+| Model | Overall Accuracy | Macro Precision | Macro Recall | Macro F1 |
+|-------|------------------|-----------------|--------------|----------|
+| emotion-ferplus-8.onnx | 37.32% | 51.91% | 29.96% | 26.76% |
+| emotion_cnn.onnx | 18.48% | 15.81% | 15.03% | 06.69% |
+| emotion.onnx | 15.58% | 08.49% | 13.26% | 05.35% |
+| Hybrid Model | **96.38** | **96.99%** | **96.99** | **96.99%** |
+
+** Hybrid model accuracy and other metrics are still giving good results, indicating that this approach is working across different dataset.**
 
 ## Troubleshooting
 

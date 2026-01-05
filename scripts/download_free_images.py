@@ -1,12 +1,13 @@
 import os
 import pathlib
 import requests
+import argparse
 from typing import List
 
 # Download images from free sources without API keys
 # Uses Pexels API (free tier: 200 requests/hour, 20K/month)
 
-def download_from_pexels(query: str, count: int, out_dir: pathlib.Path, label: str) -> None:
+def download_from_pexels(query: str, count: int, out_dir: pathlib.Path, label: str, start_offset: int = 0) -> None:
     """Download images from Pexels (free API, no credit card required)"""
     # Get free API key from: https://www.pexels.com/api/
     api_key = os.environ.get("PEXELS_API_KEY")
@@ -16,6 +17,10 @@ def download_from_pexels(query: str, count: int, out_dir: pathlib.Path, label: s
     
     out_dir.mkdir(parents=True, exist_ok=True)
     headers = {"Authorization": api_key}
+    
+    # Count existing images to determine starting number
+    existing = len(list(out_dir.glob("*.jpg")))
+    start_num = existing + 1 if start_offset == 0 else start_offset
     
     page = 1
     downloaded = 0
@@ -40,7 +45,7 @@ def download_from_pexels(query: str, count: int, out_dir: pathlib.Path, label: s
                 break
             
             img_url = photo["src"]["medium"]  # or "large", "original"
-            fname = f"{label}_{downloaded+1:03d}.jpg"
+            fname = f"{label}_{start_num + downloaded:03d}.jpg"
             dest = out_dir / fname
             
             try:
@@ -56,6 +61,11 @@ def download_from_pexels(query: str, count: int, out_dir: pathlib.Path, label: s
         page += 1
 
 def main():
+    parser = argparse.ArgumentParser(description="Download emotion images from Pexels")
+    parser.add_argument("--emotion", type=str, help="Specific emotion to download (happy, sad, angry, surprise, fear, disgust, neutral)")
+    parser.add_argument("--count", type=int, default=50, help="Number of images to download (default: 50)")
+    args = parser.parse_args()
+    
     queries = {
         "happy": "happy person face emotion",
         "sad": "sad person face emotion",
@@ -66,12 +76,22 @@ def main():
         "neutral": "neutral person face expression",
     }
     
-    root = pathlib.Path("../Images2")
-    per_class = 50  # Adjust as needed
+    root = pathlib.Path("../Images")
     
-    for label, query in queries.items():
-        print(f"\nFetching {per_class} images for '{label}'")
-        download_from_pexels(query, per_class, root / label, label)
+    # Download specific emotion or all emotions
+    if args.emotion:
+        emotion = args.emotion.lower()
+        if emotion not in queries:
+            print(f"Error: Unknown emotion '{emotion}'. Choose from: {', '.join(queries.keys())}")
+            return
+        
+        print(f"\nFetching {args.count} images for '{emotion}'")
+        download_from_pexels(queries[emotion], args.count, root / emotion, emotion)
+    else:
+        # Download all emotions
+        for label, query in queries.items():
+            print(f"\nFetching {args.count} images for '{label}'")
+            download_from_pexels(query, args.count, root / label, label)
     
     print("\nDone!")
 
