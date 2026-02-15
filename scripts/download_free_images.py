@@ -74,6 +74,7 @@ def main():
         "fear": "fearful scared person face",
         "disgust": "disgusted person face",
         "neutral": "neutral person face expression",
+        "confused": "confused person face expression uncertain puzzled",
     }
     
     root = pathlib.Path("../Images")

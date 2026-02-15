@@ -266,8 +266,74 @@ This project uses the Pexels API for image download in the Python pipeline.
 └── confusion_matrix.csv        # Performance metrics
 ```
 
+## Transfer Learning Models (PyTorch ResNet50)
+
+New binary classification models trained using transfer learning for **Confused vs Neutral** emotion detection.
+
+### Model Performance Comparison
+
+| Model | Accuracy | Precision | Recall | F1 Score | Trainable Parameters |
+|-------|----------|-----------|--------|----------|---------------------|
+| **Fine-tuning** | **90.32%** | **94.44%** | **89.47%** | **91.89%** | 25,557,032 |
+| Frozen Weights | 74.19% | 76.19% | 84.21% | 80.00% | 4,098 |
+
+### Confusion Matrices
+
+#### Fine-tuning Model (Best Performance)
+```
+              Predicted
+              confused  neutral
+Actual
+confused         17        2      (89.5% recall)
+neutral           1       11      (91.7% specificity)
+
+TP: 17 | TN: 11 | FP: 1 | FN: 2
+```
+
+#### Frozen Weights Model
+```
+              Predicted
+              confused  neutral
+Actual
+confused         16        3      (84.2% recall)
+neutral           5        7      (58.3% specificity)
+
+TP: 16 | TN: 7 | FP: 5 | FN: 3
+```
+
+### Training Details
+
+- **Architecture**: ResNet50 pretrained on ImageNet
+- **Dataset**: 110 confused images + existing neutral images
+- **Training**: 20 epochs with data augmentation
+- **Approach A (Frozen)**: Only final layer trainable (~4K parameters)
+- **Approach B (Fine-tuning)**: All layers trainable (~25.5M parameters)
+
+### Usage
+
+```powershell
+# Train both approaches
+cd scripts
+python transfer_learning.py
+
+# Evaluate specific model
+python evaluate_with_confusion_matrix.py \
+    --model_path checkpoints/finetuning_best.pt \
+    --model_name finetuning \
+    --data_dir ../Images
+```
+
+### Key Results
+
+✅ **Fine-tuning achieved 90.32% accuracy** with minimal training data (110 images)  
+✅ **Transfer learning successful**: ResNet50 adapted well to emotion recognition  
+✅ **Low false positive rate**: Only 1 false alarm on neutral faces  
+✅ **Competitive with hybrid model**: 90.32% vs 96.38% (hybrid tested on larger dataset)
+
 ## Documentation
 
 - [READMe_Metrics_Calculations.md](READMe_Metrics_Calculations.md) - Complete Python analysis pipeline
+- [TRANSFER_LEARNING_GUIDE.md](TRANSFER_LEARNING_GUIDE.md) - Transfer learning implementation guide
+- [CONFUSION_MATRIX_GUIDE.md](CONFUSION_MATRIX_GUIDE.md) - Understanding confusion matrices
 - [.env.example](.env.example) - API key configuration template
 

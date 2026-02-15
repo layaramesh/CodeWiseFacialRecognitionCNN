@@ -1,0 +1,15 @@
+True Label,confused,neutral
+confused,17,2
+neutral,1,11
+
+PERFORMANCE METRICS
+Metric,Value
+True Positives (TP),17
+True Negatives (TN),11
+False Positives (FP),1
+False Negatives (FN),2
+
+Accuracy,0.9032
+Precision,0.9444
+Recall,0.8947
+F1 Score,0.9189
